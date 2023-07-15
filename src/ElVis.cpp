@@ -31,11 +31,12 @@ void ElVis::update() {
         if (event.type == sf::Event::Closed) {
             window.close();
         }
-    }
 
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-        auto pos = sf::Mouse::getPosition(window);
-        // std::cout << "MousePos:= X: " << pos.x << " Y: " << pos.y << std::endl;
+        if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left) {
+            if (state == GameState::Home) {
+                handleHomeMouseEvent(event.mouseButton.x, event.mouseButton.y);
+            }
+        }
     }
 }
 
@@ -58,12 +59,9 @@ void ElVis::drawHome() {
 
     window.draw(background_sprite);
     window.draw(home_text);
-    for (auto btn : home_buttons) {
+    for (auto& btn : home_buttons) {
         btn.draw(window);
     }
-    // algo_button.draw(window);
-    // opt_button.draw(window);
-    // quit_button.draw(window);
 
 
     window.display();
@@ -94,6 +92,14 @@ void ElVis::initHomeButton() {
 }
 
 
+void ElVis::handleHomeMouseEvent(int posX, int posY) {
+    for (auto& btn: home_buttons) {
+        if (btn.isMouseOver(posX, posY)) {
+            std::cout << "Hurra" << std::endl;
+        }
+    }
+}
+
 
 // =========== Button ======================================================================================================================
 
@@ -108,4 +114,8 @@ void Button::setButtonPosition(const sf::Vector2f& position) {
 void Button::draw(sf::RenderWindow& window) {
     window.draw(*this);
     window.draw(text);
+}
+
+bool Button::isMouseOver(int posX, int posY) {
+    return getGlobalBounds().contains(static_cast<float>(posX), static_cast<float>(posY));
 }

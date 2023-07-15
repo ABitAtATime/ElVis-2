@@ -17,6 +17,7 @@ public:
     void drawHome();
 private:
     void initHomeButton();
+    void handleHomeMouseEvent(int posX, int posY);
 private:
     sf::RenderWindow window;
     sf::Font font;
@@ -40,7 +41,7 @@ public:
         this->setFillColor(sf::Color::Green);
     }
     void setButtonPosition(const sf::Vector2f& position);
-
+    bool isMouseOver(int posX, int posY);
     void draw(sf::RenderWindow& window);
 private:
     sf::Text text;
