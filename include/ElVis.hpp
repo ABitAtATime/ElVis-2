@@ -4,6 +4,8 @@
 
 #include "linear.hpp"
 
+class Button;
+
 
 class ElVis
 {
@@ -14,9 +16,12 @@ public:
     void draw();
     void drawHome();
 private:
+    void initHomeButton();
+private:
     sf::RenderWindow window;
     sf::Font font;
     sf::Texture home_backgound_texture;
+    std::vector<Button> home_buttons;
     unsigned int window_width, window_height;
     Linear linear;
     GameState state;

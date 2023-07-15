@@ -11,3 +11,8 @@ enum GameState {
     Visualization,
     VisualizationComplete
 };
+
+const auto AlgorithmList = {
+    "BubbleSort",
+    "InsertionSort"
+};
