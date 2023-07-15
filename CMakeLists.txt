@@ -23,6 +23,12 @@ set_target_properties(ElVis PROPERTIES
 )
 
 
+file(COPY ${CMAKE_SOURCE_DIR}/res
+    DESTINATION ${CMAKE_BINARY_DIR}
+    FILES_MATCHING
+    PATTERN "*"
+)
+
 
 # Set compiler flags
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
