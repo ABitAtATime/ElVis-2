@@ -12,6 +12,8 @@ enum GameState {
     VisualizationComplete
 };
 
+
+//TODO seperate algorithms by types
 const auto AlgorithmList = {
     "BubbleSort",
     "InsertionSort"

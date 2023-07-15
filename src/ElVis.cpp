@@ -19,6 +19,7 @@ ElVis::ElVis() {
         throw std::runtime_error("Failed to load backgound image");
     }
     initHomeButton();
+    initAlgoButton();
 }
 
 bool ElVis::isRunning() {
@@ -67,6 +68,10 @@ void ElVis::drawHome() {
     window.display();
 }
 
+void ElVis::drawAlgorithmSelector() {
+
+}
+
 void ElVis::draw() {
     switch (state) {
         case GameState::Home:
@@ -92,10 +97,32 @@ void ElVis::initHomeButton() {
 }
 
 
+void ElVis::initAlgoButton() {
+    const auto button_size = sf::Vector2f(window_width / 4, 70);
+    const float padWidth = 6.25;
+    const float padHeight = 20.0;
+    const int len = AlgorithmList.size();
+    unsigned int i = 0;
+    for (const auto& text : AlgorithmList) {
+        algo_buttons.emplace_back(Button(button_size, text, font));
+        algo_buttons[i].setButtonPosition(sf::Vector2f( (i % 3) * (padWidth + button_size.x), (i / 3) * (padHeight + button_size.y) ));
+        i++;
+    } 
+}
+
 void ElVis::handleHomeMouseEvent(int posX, int posY) {
     for (auto& btn: home_buttons) {
         if (btn.isMouseOver(posX, posY)) {
-            std::cout << "Hurra" << std::endl;
+            auto btn_str = btn.getOriginalString();
+            if (btn_str == "Quit") {
+                window.close();
+
+            } else if (btn_str == "Options") {
+                // TODO options
+                std::cout << "No options available for now" << std::endl;
+            } else if (btn_str == "Algorithms") {
+                state = GameState::Selector;
+            }
         }
     }
 }
@@ -118,4 +145,8 @@ void Button::draw(sf::RenderWindow& window) {
 
 bool Button::isMouseOver(int posX, int posY) {
     return getGlobalBounds().contains(static_cast<float>(posX), static_cast<float>(posY));
+}
+
+std::string Button::getOriginalString() {
+    return str;
 }
