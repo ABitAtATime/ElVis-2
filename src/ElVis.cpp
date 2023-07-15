@@ -16,8 +16,13 @@ ElVis::ElVis() {
     }
 
     if (!home_backgound_texture.loadFromFile("res/backgounds/home_backgound.jpg")) {
-        throw std::runtime_error("Failed to load backgound image");
+        throw std::runtime_error("Failed to load home backgound image");
     }
+
+    if (!algoselect_texture.loadFromFile("res/backgounds/algoselectbg.jpg")) {
+        throw std::runtime_error("Failed to load algorithm selector backgound image");
+    }
+
     initHomeButton();
     initAlgoButton();
 }
@@ -36,12 +41,15 @@ void ElVis::update() {
         if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left) {
             if (state == GameState::Home) {
                 handleHomeMouseEvent(event.mouseButton.x, event.mouseButton.y);
+            } else if(state == GameState::Selector) {
+                handleSelectorMouseEvent(event.mouseButton.x, event.mouseButton.y);
             }
         }
     }
 }
 
 void ElVis::drawHome() {
+    // std::cout << "testhome" << std::endl;
     window.clear();
 
     sf::Sprite background_sprite;
@@ -69,16 +77,31 @@ void ElVis::drawHome() {
 }
 
 void ElVis::drawAlgorithmSelector() {
+    // std::cout << "test" << std::endl;
+    window.clear();
 
+    sf::Sprite background_sprite;
+    background_sprite.setTexture(algoselect_texture);
+    background_sprite.setScale(window.getSize().x / background_sprite.getLocalBounds().width, window.getSize().y / background_sprite.getLocalBounds().height);
+
+    window.draw(background_sprite);
+    for (auto& btn : algo_buttons) {
+        btn.draw(window);
+    }
+
+    window.display();
 }
 
 void ElVis::draw() {
     switch (state) {
         case GameState::Home:
-            // TODO state machine logic
-            state = GameState::Home;
             drawHome();
             break;
+        case GameState::Selector:
+            drawAlgorithmSelector();
+            break;
+        default:
+            window.close();
     }
 }
 
@@ -101,7 +124,6 @@ void ElVis::initAlgoButton() {
     const auto button_size = sf::Vector2f(window_width / 4, 70);
     const float padWidth = 6.25;
     const float padHeight = 20.0;
-    const int len = AlgorithmList.size();
     unsigned int i = 0;
     for (const auto& text : AlgorithmList) {
         algo_buttons.emplace_back(Button(button_size, text, font));
@@ -111,6 +133,7 @@ void ElVis::initAlgoButton() {
 }
 
 void ElVis::handleHomeMouseEvent(int posX, int posY) {
+    // std::cout << "Handle called" << std::endl;
     for (auto& btn: home_buttons) {
         if (btn.isMouseOver(posX, posY)) {
             auto btn_str = btn.getOriginalString();
@@ -119,13 +142,18 @@ void ElVis::handleHomeMouseEvent(int posX, int posY) {
 
             } else if (btn_str == "Options") {
                 // TODO options
-                std::cout << "No options available for now" << std::endl;
+                // std::cout << "No options available for now" << std::endl;
             } else if (btn_str == "Algorithms") {
+                // std::cout << "Entering algorithm selector" << std::endl;
                 state = GameState::Selector;
             }
         }
     }
 }
+
+void ElVis::handleSelectorMouseEvent(int posX, int posY) {
+
+} 
 
 
 // =========== Button ======================================================================================================================

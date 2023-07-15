@@ -18,12 +18,14 @@ private:
     void initHomeButton();
     void initAlgoButton();
     void handleHomeMouseEvent(int posX, int posY);
+    void handleSelectorMouseEvent(int posX, int posY);
     void drawHome();
     void drawAlgorithmSelector();
 private:
     sf::RenderWindow window;
     sf::Font font;
     sf::Texture home_backgound_texture;
+    sf::Texture algoselect_texture;
     std::vector<Button> home_buttons;
     std::vector<Button> algo_buttons;
     unsigned int window_width, window_height;
