@@ -1,6 +1,3 @@
-#include <stdexcept>
-#include <filesystem>
-#include <iostream>
 #include "ElVis.hpp"
 
 ElVis::ElVis() {
@@ -9,6 +6,8 @@ ElVis::ElVis() {
     window.create(sf::VideoMode(window_width, window_height), "ElVis The Algorithm Visualizer", sf::Style::Titlebar | sf::Style::Close);
     linear.newData(1000);
     state = GameState::Home;
+    sorting_algo = std::nullopt;
+    path_find_algo = std::nullopt;
 
     if (!font.loadFromFile("res/fonts/Tektur.ttf")) {
         // /std::cerr << std::filesystem::current_path() << std::endl;
@@ -77,6 +76,7 @@ void ElVis::drawHome() {
 }
 
 void ElVis::drawAlgorithmSelector() {
+    // TODO too many magic constants
     // std::cout << "test" << std::endl;
     window.clear();
 
@@ -84,8 +84,26 @@ void ElVis::drawAlgorithmSelector() {
     background_sprite.setTexture(algoselect_texture);
     background_sprite.setScale(window.getSize().x / background_sprite.getLocalBounds().width, window.getSize().y / background_sprite.getLocalBounds().height);
 
+    sf::Text sorting_text, path_text;
+    sorting_text.setFont(font);
+    sorting_text.setString("Sorting Algorithms");
+    path_text.setFont(font);
+    path_text.setString("PathFinding Algorithms");
+
+    sorting_text.setFillColor(sf::Color::Green);
+    sorting_text.setCharacterSize(40);
+    sorting_text.setPosition((window_width * 0.5 - sorting_text.getLocalBounds().width) / 2, 10);
+    path_text.setFillColor(sf::Color::Green);
+    path_text.setCharacterSize(40);
+    path_text.setPosition(window_width * 0.5 + (window_width * 0.5 - sorting_text.getLocalBounds().width) / 2, 10);
+
     window.draw(background_sprite);
-    for (auto& btn : algo_buttons) {
+    window.draw(sorting_text);
+    window.draw(path_text);
+    for (auto& btn : sorting_algo_buttons) {
+        btn.draw(window);
+    }
+    for (auto& btn : path_algo_buttons) {
         btn.draw(window);
     }
 
@@ -99,6 +117,22 @@ void ElVis::draw() {
             break;
         case GameState::Selector:
             drawAlgorithmSelector();
+            break;
+        case GameState::Visualization:
+            if (sorting_algo) {
+                linear.visualAlgo(*sorting_algo, window, window_width, window_height);
+            } else if (path_find_algo) {
+                std::cout << "pathfinding not implemented" << std::endl;
+            } else {
+                throw std::runtime_error("Visualization entered without selecting algorithm");
+            }
+            state = GameState::VisualizationComplete;
+            break;
+        case GameState::VisualizationComplete:
+            // TODO handle viz complete properly;
+            std::cout << "visualization complete" << std::endl;
+            std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+            state = GameState::Home;
             break;
         default:
             window.close();
@@ -121,15 +155,21 @@ void ElVis::initHomeButton() {
 
 
 void ElVis::initAlgoButton() {
-    const auto button_size = sf::Vector2f(window_width / 4, 70);
-    const float padWidth = 6.25;
+    const auto button_size = sf::Vector2f(window_width / 5, 70);
+    const float padWidth = window_width / 30;
     const float padHeight = 20.0;
     unsigned int i = 0;
-    for (const auto& text : AlgorithmList) {
-        algo_buttons.emplace_back(Button(button_size, text, font));
-        algo_buttons[i].setButtonPosition(sf::Vector2f( (i % 3) * (padWidth + button_size.x), (i / 3) * (padHeight + button_size.y) ));
+    for (auto it = SortingAlgorithmMap.begin(); it != SortingAlgorithmMap.end(); ++it) {
+        sorting_algo_buttons.emplace_back(Button(button_size, it->first, font, 0.6));
+        sorting_algo_buttons[i].setButtonPosition(sf::Vector2f( padWidth + (i % 2) * (padWidth + button_size.x), 150 + (i / 2) * (padHeight + button_size.y) ));
         i++;
-    } 
+    }
+    i=0;
+    for (auto it = PathFindingAlgorithmMap.begin(); it != PathFindingAlgorithmMap.end(); ++it) {
+        path_algo_buttons.emplace_back(Button(button_size, it->first, font, 0.6));
+        path_algo_buttons[i].setButtonPosition(sf::Vector2f( window_width / 2  + padWidth + (i % 2) * (padWidth + button_size.x), 150 + (i / 2) * (padHeight + button_size.y) ));
+        i++;
+    }
 }
 
 void ElVis::handleHomeMouseEvent(int posX, int posY) {
@@ -152,8 +192,22 @@ void ElVis::handleHomeMouseEvent(int posX, int posY) {
 }
 
 void ElVis::handleSelectorMouseEvent(int posX, int posY) {
+    for (auto& btn : sorting_algo_buttons) {
+        if (btn.isMouseOver(posX, posY)) {
+            auto btn_str = btn.getOriginalString();
+            sorting_algo = SortingAlgorithmMap.at(btn_str);
+            state = GameState::Visualization;
+        }
+    }
 
-} 
+    for (auto& btn : path_algo_buttons) {
+        if (btn.isMouseOver(posX, posY)) {
+            auto btn_str = btn.getOriginalString();
+            path_find_algo = PathFindingAlgorithmMap.at(btn_str);
+            state = GameState::Visualization;
+        }
+    }
+}
 
 
 // =========== Button ======================================================================================================================

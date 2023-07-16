@@ -1,5 +1,3 @@
-#include <random>
-
 #include "linear.hpp"
 
 Linear::Linear() : data_size{100} {
@@ -36,10 +34,63 @@ void Linear::visualAlgo(SortingAlgorithm algo, sf::RenderWindow& window, unsigne
         case SortingAlgorithm::insertion:
             insertion_sort(window, width, height);
             break;
+        case SortingAlgorithm::merge:
+            // TODO
+            std::cout << "merge not implemented here have a look at insertion sort" << std::endl;
+            insertion_sort(window, width, height);
+            break;
+        case SortingAlgorithm::quick:
+            // TODO
+            std::cout << "quick not implemented here have a look at insertion sort" << std::endl;
+            insertion_sort(window, width, height);
+            break;
+        case SortingAlgorithm::radix:
+            // TODO
+            std::cout << "radix not implemented here have a look at insertion sort" << std::endl;
+            insertion_sort(window, width, height);
+            break;
+        case SortingAlgorithm::heap:
+            // TODO
+            // std::cout << "heap not implemented here have a look at insertion sort" << std::endl;
+            heap_sort(window, width, height);
+            break;
+        case SortingAlgorithm::selection:
+            selection_sort(window, width, height);
+            break;
         default:
+            std::cout << "idk how you got here but have a look at insertion sort" << std::endl;
             insertion_sort(window, width, height);
     }
 }
+
+
+
+void Linear::visualize(sf::RenderWindow& window, unsigned int width, unsigned int height) {
+    if (!window.isOpen()) {
+        exit(1);
+    }
+    const float columnWidth = static_cast<float>(width) / data_size;
+    window.clear();
+    for (int i = 0; i < (int)data_size; ++i){
+        float columnHeight = (height * 0.9) * data[i] / max;
+        sf::RectangleShape column(sf::Vector2f(columnWidth, columnHeight));
+        column.setPosition(i * columnWidth, height - columnHeight);
+        column.setFillColor(sf::Color::Blue);
+        window.draw(column);
+    }
+    window.display();
+
+    sf::Event event;
+    while (window.pollEvent(event)) {
+        if (event.type == sf::Event::Closed) {
+            window.close();
+        }
+    }
+    
+}
+
+
+// ============ Sorting algorithms only no helper funcitons ====================================================================================================
 
 void Linear::bubble_sort(sf::RenderWindow& window, unsigned int width, unsigned int height) {
     for (int j=0; j<(int)data_size-1; j++) {
@@ -68,23 +119,67 @@ void Linear::insertion_sort(sf::RenderWindow& window, unsigned int width, unsign
     }
 }
 
-void Linear::visualize(sf::RenderWindow& window, unsigned int width, unsigned int height) {
-    const float columnWidth = static_cast<float>(width) / data_size;
-    window.clear();
-    for (int i = 0; i < (int)data_size; ++i){
-        float columnHeight = (height * 0.9) * data[i] / max;
-        sf::RectangleShape column(sf::Vector2f(columnWidth, columnHeight));
-        column.setPosition(i * columnWidth, height - columnHeight);
-        column.setFillColor(sf::Color::Blue);
-        window.draw(column);
-    }
-    window.display();
-
-    sf::Event event;
-    while (window.pollEvent(event)) {
-        if (event.type == sf::Event::Closed) {
-            window.close();
+void Linear::selection_sort(sf::RenderWindow& window, unsigned int width, unsigned int height) {
+    int min_index;
+    for (int i = 0; i < data_size - 1; i++) {
+        min_index = i;
+        for (int j = i + 1; j < data_size; j++) {
+            if (data[j] < data[min_index]) {
+                min_index = j;
+            }
+            visualize(window, width, height);
+        }
+        if (min_index != i) {
+            auto temp = data[i];
+            data[i] = data[min_index];
+            data[min_index] = temp;
         }
     }
-    
+}
+
+
+
+void Linear::heap_sort(sf::RenderWindow& window, unsigned int width, unsigned int height)
+{
+    for (int i = data_size / 2 - 1; i >= 0; i--)
+    {
+        heapify(window, width, height, data_size,  i);
+    }
+    for (int i = data_size - 1; i > 0; i--)
+    {
+        auto temp = data[0];
+        data[0] = data[i];
+        data[i] = temp;
+
+        heapify(window, width, height, i, 0);
+    }
+}
+
+
+
+
+
+// =================== sorting helper functions ======================================================================
+
+void Linear::heapify(sf::RenderWindow& window, unsigned int width, unsigned int height, int N, unsigned int i)
+{
+    auto largest = i;
+    auto left = 2 * i + 1;
+    auto right = 2 * i + 2;
+    if (left < N && data[left] > data[largest])
+    {
+        largest = left;
+    }
+    if (right < N && data[right] > data[largest])
+    {
+        largest = right;
+    }
+    if (largest != i)
+    {
+        auto temp = data[i];
+        data[i] = data[largest];
+        data[largest] = temp;
+        visualize(window, width, height);
+        Linear::heapify(window, width, height, N, largest);
+    }
 }
