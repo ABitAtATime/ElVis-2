@@ -15,6 +15,7 @@ public:
 private:
     void initHomeButton();
     void initAlgoButton();
+    void initUiButton();
     void handleHomeMouseEvent(int posX, int posY);
     void handleSelectorMouseEvent(int posX, int posY);
     void drawHome();
@@ -27,6 +28,7 @@ private:
     std::vector<Button> home_buttons;
     std::vector<Button> sorting_algo_buttons;
     std::vector<Button> path_algo_buttons;
+    std::vector<Button> ui_buttons;
     unsigned int window_width, window_height;
     Linear linear;
     GameState state;

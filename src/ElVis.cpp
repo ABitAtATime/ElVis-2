@@ -24,6 +24,7 @@ ElVis::ElVis() {
 
     initHomeButton();
     initAlgoButton();
+    initUiButton();
 }
 
 bool ElVis::isRunning() {
@@ -106,6 +107,11 @@ void ElVis::drawAlgorithmSelector() {
     for (auto& btn : path_algo_buttons) {
         btn.draw(window);
     }
+    for (auto& btn : ui_buttons ) {
+        if (btn.getOriginalString() == "back") {
+            btn.draw(window);
+        }
+    }
 
     window.display();
 }
@@ -170,6 +176,15 @@ void ElVis::initAlgoButton() {
         path_algo_buttons[i].setButtonPosition(sf::Vector2f( window_width / 2  + padWidth + (i % 2) * (padWidth + button_size.x), 150 + (i / 2) * (padHeight + button_size.y) ));
         i++;
     }
+
+}
+
+void ElVis::initUiButton() {
+    const auto back_button_size = sf::Vector2f(window_width / 5, 70);
+    ui_buttons.emplace_back(Button(back_button_size, "back", font, 0.6));
+    ui_buttons[0].setButtonPosition(sf::Vector2f(window_width - back_button_size.x - 30, window_height - 100));
+
+
 }
 
 void ElVis::handleHomeMouseEvent(int posX, int posY) {
@@ -192,11 +207,18 @@ void ElVis::handleHomeMouseEvent(int posX, int posY) {
 }
 
 void ElVis::handleSelectorMouseEvent(int posX, int posY) {
+    for (auto& btn : ui_buttons) {
+        if (btn.getOriginalString() == "back" && btn.isMouseOver(posX, posY)) {
+            state = GameState::Home;
+            return ;
+        }
+    }
     for (auto& btn : sorting_algo_buttons) {
         if (btn.isMouseOver(posX, posY)) {
             auto btn_str = btn.getOriginalString();
             sorting_algo = SortingAlgorithmMap.at(btn_str);
             state = GameState::Visualization;
+            return;
         }
     }
 
@@ -211,6 +233,8 @@ void ElVis::handleSelectorMouseEvent(int posX, int posY) {
 
 
 // =========== Button ======================================================================================================================
+
+
 
 void Button::setButtonPosition(const sf::Vector2f& position) {
     setPosition(position);
