@@ -1,7 +1,5 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
-
 #include "linear.hpp"
 
 class Button;
@@ -27,19 +25,22 @@ private:
     sf::Texture home_backgound_texture;
     sf::Texture algoselect_texture;
     std::vector<Button> home_buttons;
-    std::vector<Button> algo_buttons;
+    std::vector<Button> sorting_algo_buttons;
+    std::vector<Button> path_algo_buttons;
     unsigned int window_width, window_height;
     Linear linear;
     GameState state;
+    std::optional<SortingAlgorithm> sorting_algo;
+    std::optional<PathFindingAlgorithm>path_find_algo;
 };
 
 
 
 class Button : public sf::RectangleShape {
 public:
-    Button(const sf::Vector2f &size, const std::string str, sf::Font& font) : sf::RectangleShape(size) {
+    Button(const sf::Vector2f &size, const std::string str, sf::Font& font, float char_size_scale=0.75) : sf::RectangleShape(size) {
         text.setFont(font);
-        text.setCharacterSize(static_cast<unsigned int>(size.y * 0.75));
+        text.setCharacterSize(static_cast<unsigned int>(size.y * char_size_scale));
         text.setFillColor(sf::Color::Black);
         text.setString(str);
         this->setFillColor(sf::Color::Green);
