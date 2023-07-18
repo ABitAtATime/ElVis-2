@@ -57,6 +57,7 @@ And here is the screen for selecting Algorithms
 ![Selector Screen](res/readme/selectorscreen.png)
 
 ![Heap sort gif](res/readme/heapsort.gif)
+---
 *And finally here is heap sort in action*
 
 
