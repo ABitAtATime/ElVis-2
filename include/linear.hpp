@@ -14,17 +14,17 @@ private:
 
 
 private: // sorting algorithms
-    void merge_sort(sf::RenderWindow& window, unsigned int width, unsigned int height);
-    void quick_sort(sf::RenderWindow& window, unsigned int width, unsigned int height);
+    void merge_sort(sf::RenderWindow& window, unsigned int width, unsigned int height , unsigned int low , unsigned int high);
+    void quick_sort(sf::RenderWindow& window, unsigned int width, unsigned int height ,  int low ,  int high);
     void radix_sort(sf::RenderWindow& window, unsigned int width, unsigned int height);
     void heap_sort(sf::RenderWindow& window, unsigned int width, unsigned int height);
     void bubble_sort(sf::RenderWindow& window, unsigned int width, unsigned int height);
     void insertion_sort(sf::RenderWindow& window, unsigned int width, unsigned int height);
     void selection_sort(sf::RenderWindow& window, unsigned int width, unsigned int height);
 private: // helper functions of sorting
-    void metge(); // mergesort
-    void partition(); // quicksort
-    void count_sort(); // radiz
+    void merge(sf::RenderWindow& window, unsigned int width, unsigned int height , unsigned int low ,unsigned int mid , unsigned int high); // mergesort
+    int partition(sf::RenderWindow& window, unsigned int width, unsigned int height ,  int low ,  int high); // quicksort
+    void count_sort(sf::RenderWindow &window, unsigned int width, unsigned int height , int power); // radiz
     void heapify(sf::RenderWindow& window, unsigned int width, unsigned int height, int N, unsigned int i); // heap
 
 private:
