@@ -34,42 +34,34 @@ void Linear::visualAlgo(SortingAlgorithm algo, sf::RenderWindow &window, unsigne
     switch (algo)
     {
     case SortingAlgorithm::bubble:
-        newData(data_size);
         bubble_sort(window, width, height);
         break;
     case SortingAlgorithm::insertion:
-        newData(data_size);
 
         insertion_sort(window, width, height);
         break;
     case SortingAlgorithm::merge:
-        newData(data_size);
 
         merge_sort(window, width, height, 0, data_size);
         break;
     case SortingAlgorithm::quick:
-        newData(data_size);
 
         quick_sort(window, width, height, 0, data_size);
         break;
     case SortingAlgorithm::radix:
-        newData(data_size);
 
         radix_sort(window, width, height);
         break;
     case SortingAlgorithm::heap:
-        newData(data_size);
 
         heap_sort(window, width, height);
         break;
     case SortingAlgorithm::selection:
-        newData(data_size);
 
         selection_sort(window, width, height);
         break;
     default:
         std::cout << "idk how you got here but have a look at heap sort" << std::endl;
-        newData(data_size);
 
         heap_sort(window, width, height);
     }
