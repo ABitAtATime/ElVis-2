@@ -24,11 +24,11 @@ ElVis is a C++ project aimed at visualizing various algorithms using the SFML (S
 ## Installation
 1. Clone the repository:
    ```shell
-   git clone https://github.com/ABitAtATime/ElVis.git
+   git clone https://github.com/ABitAtATime/ElVis-2.git
    ```
 2. Create a build directory
    ```shell
-   cd ElVis
+   cd ElVis-2
    mkdir build
    cd build
    ```
@@ -66,10 +66,10 @@ And here is the screen for selecting Algorithms
 - Bubble Sort ✓
 - Merge Sort ✓
 - Quick Sort ✓
-- Selection Sort 
+- Selection Sort ✓
 - Insertion Sort ✓
 - Heap Sort ✓
-- Radix Sort 
+- Radix Sort ✓
 ### Pathfinding Algorithms
 - Breadth-First Search (BFS) 
 - Depth-First Search (DFS)
