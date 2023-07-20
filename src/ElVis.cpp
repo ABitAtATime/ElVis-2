@@ -132,6 +132,7 @@ void ElVis::draw() {
             // TODO handle viz complete properly;
             std::cout << "visualization complete" << std::endl;
             std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+            linear.newData(1000);
             state = GameState::Home;
             break;
         default:
