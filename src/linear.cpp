@@ -1,4 +1,5 @@
 #include "linear.hpp"
+
 Linear::Linear() : data_size{1000}
 {
     generateRandomData();
@@ -21,10 +22,19 @@ void Linear::generateRandomData()
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<int> distribution(0, 1500);
+
+
+    //-------------------creating a file--------------------------------
+    std::ofstream outputFile("notSorted.txt");
+    
     for (size_t i = 0; i < data_size; ++i)
-    {
-        data.push_back(distribution(gen));
+    {   
+        int temp = distribution(gen);
+        data.push_back(temp);
+        outputFile <<temp<< std::endl;
+        
     }
+    outputFile.close();
 
     max = *max_element(data.begin(), data.end());
 }
