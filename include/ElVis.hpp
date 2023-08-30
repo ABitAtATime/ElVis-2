@@ -32,6 +32,7 @@ private:
     GameState state;
     std::optional<SortingAlgorithm> sorting_algo;
     std::optional<PathFindingAlgorithm>path_find_algo;
+    std::fstream sorting_stats;
 };
 
 
@@ -41,7 +42,7 @@ public:
     Button(const sf::Vector2f &size, const std::string str, sf::Font& font, float char_size_scale=0.75) : sf::RectangleShape(size) {
         text.setFont(font);
         text.setCharacterSize(static_cast<unsigned int>(size.y * char_size_scale));
-        text.setFillColor(sf::Color::Black);
+        text.setFillColor(sf::Color::Blue);
         text.setString(str);
         this->setFillColor(sf::Color::Green);
         this->str = str;

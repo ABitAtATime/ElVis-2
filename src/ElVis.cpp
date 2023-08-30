@@ -8,6 +8,9 @@ ElVis::ElVis() {
     state = GameState::Home;
     sorting_algo = std::nullopt;
     path_find_algo = std::nullopt;
+    sorting_stats.open("stats.txt", std::ios::app);
+    // sorting_stats << "Sorting Algorithm Stats" << std::endl;
+
 
     if (!font.loadFromFile("res/fonts/Tektur.ttf")) {
         // /std::cerr << std::filesystem::current_path() << std::endl;
@@ -120,7 +123,19 @@ void ElVis::draw() {
             break;
         case GameState::Visualization:
             if (sorting_algo) {
+                sorting_stats << "==============================================================\n";
+                for (auto it=SortingAlgorithmMap.begin(); it != SortingAlgorithmMap.end(); ++it) {
+                    if (it->second == *sorting_algo) {
+                        sorting_stats << "Algorithm: " << it->first << "\n";
+                        break;
+                    }
+                }
+                sorting_stats << "Data Size: 1000\n";
+                auto start = std::chrono::high_resolution_clock::now();
+
                 linear.visualAlgo(*sorting_algo, window, window_width, window_height);
+                auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start);
+                sorting_stats << "Time Taken: " << duration.count() << "ms\n";
             } else if (path_find_algo) {
                 std::cout << "pathfinding not implemented" << std::endl;
             } else {
