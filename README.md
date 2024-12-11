@@ -81,5 +81,5 @@ Note: Only the algorithms with ✓ are implemented as of last commit.
 
 ## Authors
 - [Sandeep Poudel](https://github.com/sandeep-poudel)
-- [Sandesh Pokharel](https://github.com/hsednass)
+- [Sandesh Pokharel](https://github.com/sandes-pokharel)
 - [Sudesh Subedi](https://github.com/sudeshsubedi)
